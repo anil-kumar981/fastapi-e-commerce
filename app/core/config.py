@@ -33,6 +33,14 @@ class Settings:
     # Ensure DATABASE_URL is always a string to avoid Pyright/type errors
     DATABASE_URL: str = os.getenv("DATABASE_URL", "")
 
+    def __init__(self):
+        # Fail-fast validation: Ensure key configuration is present
+        if not self.DATABASE_URL:
+            raise ValueError(
+                f"DATABASE_URL is not set for ENV='{self.ENV}'. "
+                f"Please check your {env_file.name} file."
+            )
+
 
 # Create a global settings instance
 settings = Settings()
