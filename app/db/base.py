@@ -11,5 +11,10 @@ naming_convention = {
     "pk": "pk_%(table_name)s",
 }
 
+# MetaData ek container hai jo:
+# Tables ko track karta hai
+# Constraints ko track karta hai
+# Indexes ko track karta hai
+# Foreign keys ko track karta hai
 metadata = MetaData(naming_convention=naming_convention)
 Base = declarative_base(metadata=metadata)
