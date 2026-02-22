@@ -15,8 +15,8 @@ def main():
     # Note: Running via 'uvicorn main:app --reload' is preferred for development
     uvicorn.run(
         "main:app",
-        host="127.0.0.1",
-        port=9922,
+        host=settings.IP_ADDRESS,
+        port=settings.PORT,
         reload=True if settings.ENV == "development" else False,
     )
 

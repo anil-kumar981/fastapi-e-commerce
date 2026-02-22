@@ -25,6 +25,8 @@ MANIFEST
 # Environment variables (CRITICAL)
 .env
 .env.*
+.env.production
+.env.development
 !.env.example
 
 # Virtual Environment

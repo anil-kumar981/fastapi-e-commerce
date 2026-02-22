@@ -32,6 +32,8 @@ class Settings:
     ENV: str = ENV
     # Ensure DATABASE_URL is always a string to avoid Pyright/type errors
     DATABASE_URL: str = os.getenv("DATABASE_URL", "")
+    IP_ADDRESS: str = os.getenv("IP_ADDRESS", "")
+    PORT: int = int(os.getenv("PORT", 8000))
 
     def __init__(self):
         # Fail-fast validation: Ensure key configuration is present
