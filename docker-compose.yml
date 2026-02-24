@@ -1,0 +1,25 @@
+version: '3.9'
+
+services:
+  app:
+    build: .
+    ports:
+      - "9922:9922"
+    env_file:
+      - .env.development
+    depends_on:
+      - db
+  db:
+    image: postgres:15-alpine
+    container_name: ecommerce-db
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=@AnilDCTtechnology9817
+      - POSTGRES_DB=ecommerce
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    
+volumes:
+  postgres_data:
