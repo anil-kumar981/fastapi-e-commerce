@@ -35,6 +35,11 @@ class Settings:
     IP_ADDRESS: str = os.getenv("IP_ADDRESS", "")
     PORT: int = int(os.getenv("PORT", 8000))
 
+    # JWT Settings
+    JWT_SECRET_KEY: str = os.getenv("JWT_SECRET_KEY", "")
+    JWT_ALGORITHM: str = os.getenv("JWT_ALGORITHM", "HS256")
+    JWT_TOKEN_EXPIRE_IN_DAYS: int = int(os.getenv("JWT_TOKEN_EXPIRE_IN_DAYS", 7))
+
     def __init__(self):
         # Fail-fast validation: Ensure key configuration is present
         if not self.DATABASE_URL:

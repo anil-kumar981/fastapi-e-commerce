@@ -23,11 +23,8 @@ share/python-wheels/
 MANIFEST
 
 # Environment variables (CRITICAL)
-.env
 .env.*
-.env.production
-.env.development
-!.env.example
+.env
 
 # Virtual Environment
 .venv/

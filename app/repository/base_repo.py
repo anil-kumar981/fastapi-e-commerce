@@ -1,5 +1,8 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
+
 
 class BaseRepo:
-    def __init__(self, db: Session):
+    db: AsyncSession
+
+    def __init__(self, db: AsyncSession):
         self.db = db
