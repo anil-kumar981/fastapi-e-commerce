@@ -12,9 +12,9 @@ from app.common import (
     get_password_hash,
     verify_password,
     create_access_token,
-    decode_access_token,
 )
 from typing import cast
+from app.core.redis import redis_client
 
 
 class AuthService:
@@ -49,6 +49,10 @@ class AuthService:
             result = await self.repo.create_user(user_create)
             if not result:
                 raise HTTPException(status_code=400, detail="User not created")
+
+            keys = await redis_client.keys("users:page:*")
+            if keys:
+                await redis_client.delete(*keys)
 
             # Token Generation
             token = create_access_token({"sub": str(result.id), "role": result.role})

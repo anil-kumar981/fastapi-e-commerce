@@ -7,7 +7,7 @@ from typing import Optional
 class UserRegisterSchema(BaseModel):
     username: str = Field(min_length=3, max_length=50)
     email: EmailStr
-    password: str = Field(min_length=8)
+    password: str = Field(min_length=8, max_length=50)
 
     @field_validator("password")
     @classmethod
@@ -19,7 +19,7 @@ class UserRegisterSchema(BaseModel):
 
 class UserLoginSchema(BaseModel):
     email: EmailStr
-    password: str = Field(min_length=8)
+    password: str = Field(min_length=8, max_length=50)
 
     @field_validator("password")
     @classmethod

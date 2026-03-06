@@ -21,4 +21,6 @@ def validate_password(v: str) -> str:
         raise ValueError(
             "Password must contain at least one special character (@$!%*?&)"
         )
+    if len(v) > 72:
+        raise ValueError("Password cannot be longer than 72 characters")
     return v

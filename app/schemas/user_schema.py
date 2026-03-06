@@ -23,28 +23,18 @@ class UserBase(BaseModel):
 class UserCreateSchema(UserBase):
     username: str = Field(min_length=3, max_length=50)
     email: EmailStr
-    password: str = Field(min_length=8)
-
-    @field_validator("password")
-    @classmethod
-    def validate_password_field(cls, v: str) -> str:
-        return validate_password(v)
+    password: str = Field(min_length=8, max_length=72)
 
 
 class UserUpdateSchema(UserBase):
     username: str | None = Field(None, min_length=3, max_length=50)
     email: EmailStr | None = None
-    password: str | None = Field(None, min_length=8)
-
-    @field_validator("password")
-    @classmethod
-    def validate_password_field(cls, v: str | None) -> str | None:
-        if v is not None:
-            return validate_password(v)
-        return v
+    password: str | None = Field(None, min_length=8, max_length=72)
 
 
-class UserResponseSchema(UserCreateSchema):
+class UserResponseSchema(UserBase):
     id: int
+    username: str
+    email: EmailStr
 
     model_config = ConfigDict(from_attributes=True)

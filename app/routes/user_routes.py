@@ -1,10 +1,9 @@
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends
 from typing import List
 from app.schemas import UserCreateSchema, UserResponseSchema
 from app.services import UserService
-from app.dependencies import get_user_service, RoleChecker
-from app.models import Role, User
-from app.common import ResponseFactory
+from app.dependencies import get_user_service
+from app.common.filters import FilterParams
 
 router = APIRouter(prefix="/users", tags=["Users"])
 
@@ -19,27 +18,21 @@ async def create_user(
     This endpoint is typically used for administrative purposes and returns
     a standardized success response with the newly created user data.
     """
-    result = await user_service.create_user(user)
-    return ResponseFactory.success(
-        data=result,
-        message="User created successfully",
-        status_code=status.HTTP_201_CREATED,
-    )
+    return await user_service.create_user(user)
 
 
 @router.get("/", response_model=List[UserResponseSchema])
 async def get_all_users(
+    params: FilterParams = Depends(),
     user_service: UserService = Depends(get_user_service),
-    current_seller: User = Depends(RoleChecker([Role.SELLER])),
 ):
     """
-    Retrieve a list of all users in the system.
+    Retrieve a list of all users in the system with filtering.
 
     Only accessible by users with the SELLER role. Returns a standardized
     success response with the list of users.
     """
-    result = await user_service.get_all_users()
-    return ResponseFactory.success(data=result)
+    return await user_service.get_all_users(params)
 
 
 @router.get("/{email}", response_model=UserResponseSchema)
@@ -51,5 +44,4 @@ async def get_user_by_email(
 
     Returns a standardized success response containing the user profile data.
     """
-    result = await user_service.get_user_by_email(email)
-    return ResponseFactory.success(data=result)
+    return await user_service.get_user_by_email(email)

@@ -40,6 +40,10 @@ class Settings:
     JWT_ALGORITHM: str = os.getenv("JWT_ALGORITHM", "HS256")
     JWT_TOKEN_EXPIRE_IN_DAYS: int = int(os.getenv("JWT_TOKEN_EXPIRE_IN_DAYS", 7))
 
+    # Redis Settings
+    REDIS_HOST: str = os.getenv("REDIS_HOST", "redis").strip()
+    REDIS_PORT: int = int(os.getenv("REDIS_PORT", "6379").strip())
+
     def __init__(self):
         # Fail-fast validation: Ensure key configuration is present
         if not self.DATABASE_URL:
@@ -51,3 +55,8 @@ class Settings:
 
 # Create a global settings instance
 settings = Settings()
+
+# Diagnostic logging for startup
+print(f"DEBUG: Loaded DATABASE_URL: {settings.DATABASE_URL[:20]}...")
+print(f"DEBUG: Loaded REDIS_HOST: '{settings.REDIS_HOST}'")
+print(f"DEBUG: Loaded REDIS_PORT: {settings.REDIS_PORT}")

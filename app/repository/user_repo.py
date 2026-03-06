@@ -2,6 +2,7 @@ from app.repository.base_repo import BaseRepo
 from app.models.user_model import User
 from app.schemas.user_schema import UserCreateSchema, UserUpdateSchema
 from typing import List, Optional
+from app.common.filters import FilterParams
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -66,14 +67,29 @@ class UserRepo(BaseRepo):
         result = await self.db.execute(select(User).filter(User.email == email))
         return result.scalars().first()
 
-    async def get_all_users(self) -> List[User]:
+    async def get_all_users(self, params: FilterParams) -> List[User]:
         """
-        Retrieve all user records from the database.
+        Retrieve user records from the database with filtering, sorting, and pagination.
+
+        Args:
+            params (FilterParams): The filtering and pagination parameters.
 
         Returns:
-            List[User]: A list of all User model instances.
+            List[User]: A list of User model instances matching the criteria.
         """
-        result = await self.db.execute(select(User))
+        query = select(User)
+
+        # Search functionality (username or email)
+        if params.search:
+            search_filter = (User.username.ilike(f"%{params.search}%")) | (
+                User.email.ilike(f"%{params.search}%")
+            )
+            query = query.filter(search_filter)
+
+        # Apply common filters (Sorting & Pagination)
+        query = self.apply_filters(query, User, params)
+
+        result = await self.db.execute(query)
         return list(result.scalars().all())
 
     async def get_user_by_id(self, user_id: int) -> Optional[User]:
